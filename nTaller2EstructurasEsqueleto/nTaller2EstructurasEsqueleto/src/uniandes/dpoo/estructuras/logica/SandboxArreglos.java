@@ -261,12 +261,9 @@ public class SandboxArreglos
    
           nuevoArreglo[nuevoArreglo.length-1] = elementx;
    
-          for (int i = nuevoArreglo.length-1 + 1; i <= nuevoArreglo.length; i++) {
-        	  nuevoArreglo[i] = nuevoArreglo[i - 1];
-          }
   	
     	}
-    	arregloEnteros = nuevoArreglo;
+    	arregloEnteros = nuevoArreglo.clone();
     }
 
     /**
@@ -290,11 +287,11 @@ public class SandboxArreglos
           nuevoArreglo[nuevoArreglo.length-1] = elementx;
    
           for (int i = nuevoArreglo.length-1 + 1; i <= nuevoArreglo.length; i++) {
-        	  nuevoArreglo[i] = nuevoArreglo[i - 1];
+        	  arregloCadenas[i] = nuevoArreglo[i - 1];
           }
   	
     	}
-    	arregloCadenas = nuevoArreglo;
+    	
 
     }
 
@@ -336,16 +333,7 @@ public class SandboxArreglos
      */
     public void organizarCadenas( )
     {
-    	for(int i=0;i<(arregloCadenas.length-1);i++){
-            for(int j=i+1;j<arregloCadenas.length;j++){
-                if(arregloCadenas[i].compareTo(arregloCadenas[j]) > 0){
-                    
-                    String variableAuxiliar=arregloCadenas[i];
-                    arregloCadenas[i]=arregloCadenas[j];
-                    arregloCadenas[j]=variableAuxiliar;
-                }
-            }
-        }
+    	Arrays.sort(arregloCadenas);
     }
 
     /**
@@ -375,7 +363,7 @@ public class SandboxArreglos
     {
         	int contador = 0;
         	for (String element : arregloCadenas) {
-        		if(element.toLowerCase() == cadena.toLowerCase()) {
+        		if(element.equalsIgnoreCase(cadena)) {
         			contador++;
         		}
         	}
@@ -431,11 +419,11 @@ public class SandboxArreglos
                 }
             }
         }
-    	
-    	int mayor = arregloEnteros[arregloEnteros.length-1];
+    	int tamaño = arregloEnteros.length;
+    	int mayor = arregloEnteros[tamaño-1];
     	int menor = arregloEnteros[0];
     	
-    	if(arregloEnteros.length != 0) {
+    	if(arregloEnteros.length > 0) {
     		int [] rangoEnteros = new int[] {menor, mayor};
     		return rangoEnteros;
     		
@@ -518,11 +506,11 @@ public class SandboxArreglos
      */
     public boolean compararArregloEnteros( int[] otroArreglo )
     {
+    	boolean retorno = false;
     	if( Arrays.equals(arregloEnteros, otroArreglo)) {
-    		return true;
-    	} else {
-    		return false;		
-    	}
+    		retorno = true;
+    	} 
+    	return retorno;
     }
 
     /**
