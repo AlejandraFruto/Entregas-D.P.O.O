@@ -94,10 +94,6 @@ public class SandboxArreglos
    
 
    
-          for (int i = arregloEnteros.length-1 + 1; i <= arregloEnteros.length; i++) {
-              result[i] = arregloEnteros[i - 1];
-          }
-   
   		arregloEnteros = result;
     }
 
@@ -340,7 +336,16 @@ public class SandboxArreglos
      */
     public void organizarCadenas( )
     {
-    	Arrays.sort(arregloCadenas);
+    	for(int i=0;i<(arregloCadenas.length-1);i++){
+            for(int j=i+1;j<arregloCadenas.length;j++){
+                if(arregloCadenas[i].compareTo(arregloCadenas[j]) > 0){
+                    
+                    String variableAuxiliar=arregloCadenas[i];
+                    arregloCadenas[i]=arregloCadenas[j];
+                    arregloCadenas[j]=variableAuxiliar;
+                }
+            }
+        }
     }
 
     /**
