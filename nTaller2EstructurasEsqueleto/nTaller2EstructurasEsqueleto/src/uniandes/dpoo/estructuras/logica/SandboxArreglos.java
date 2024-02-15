@@ -1,6 +1,8 @@
 package uniandes.dpoo.estructuras.logica;
 
 import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Esta clase tiene un conjunto de métodos para practicar operaciones sobre arreglos de enteros y de cadenas.
@@ -34,6 +36,7 @@ public class SandboxArreglos
     {
         arregloEnteros = new int[]{};
         arregloCadenas = new String[]{};
+        
     }
 
     /**
@@ -42,9 +45,7 @@ public class SandboxArreglos
      */
     public int[] getCopiaEnteros( )
     {
-    	int[] copiaEnteros = arregloEnteros.clone();    
-
-        return copiaEnteros;
+    	return Arrays.copyOf(arregloEnteros, arregloEnteros.length);
     }
 
     /**
@@ -52,10 +53,20 @@ public class SandboxArreglos
      * @return Una copia del arreglo de cadenas
      */
     public String[] getCopiaCadenas( )
-    {
-    	String[] copiaCadenas = arregloCadenas.clone();    
-
-        return copiaCadenas;
+    {   
+    	
+    	String[] copiaCadenas = new String[arregloCadenas.length];
+    	int i = 0;
+    	for ( i=0; i < arregloCadenas.length ; i++) {
+    		if (arregloCadenas[i] != null) {
+    			
+    			copiaCadenas[i] = arregloCadenas[i];
+    		}
+    		
+    	}
+    	
+    	return copiaCadenas;
+        
     }
 
     /**
@@ -74,8 +85,7 @@ public class SandboxArreglos
      */
     public int getCantidadCadenas( )
     {
-    	int cantidadValoresCadenas = arregloCadenas.length;
-        return cantidadValoresCadenas;
+    	return arregloCadenas.length;
     }
 
     /**
@@ -85,16 +95,8 @@ public class SandboxArreglos
      */
     public void agregarEntero( int entero )
     {
-		
-    	  int[] result = new int[arregloEnteros.length + 1];
-          
-          for (int i = 0; i < arregloEnteros.length-1; i++) {
-              result[i] = arregloEnteros[i];
-          }
-   
-
-   
-  		arregloEnteros = result;
+    	arregloEnteros = Arrays.copyOf(arregloEnteros, arregloEnteros.length + 1);
+        arregloEnteros[arregloEnteros.length - 1] = entero;
     }
 
     /**
@@ -104,17 +106,10 @@ public class SandboxArreglos
      */
     public void agregarCadena( String cadena )
     {
-		String[] result = new String[arregloCadenas.length + 1];
+		String[] result = Arrays.copyOf(arregloCadenas, arregloCadenas.length+1);
 		
-		for (int i = 0, j = 0; i < arregloCadenas.length; i++, j++)
-		{
-			if (i == arregloCadenas.length -1)
-			{
-				result[j] = cadena;
-				j++;
-			}
-			result[j] = arregloCadenas[i];
-		}
+		result[arregloCadenas.length] = cadena;
+		
 		arregloCadenas = result;
 
     }
@@ -125,18 +120,26 @@ public class SandboxArreglos
      */
     public void eliminarEntero( int valor )
     {
-        for (int i = 0; i < getCantidadEnteros() - 1; i++) {
-            if (arregloEnteros[i] == valor) {
-              arregloEnteros = new int[getCantidadEnteros() - 1];
-              for (int index = 0; index < i; index++) {
-                arregloEnteros[index] = getCopiaEnteros()[index];
-              }
-              for (int j = i; j < getCantidadEnteros() - 1; j++) {
-                arregloEnteros[j] = getCopiaEnteros()[j + 1];
-              }
-              
-            }
-          } 
+    	int contador=0;
+    	for(int i=0; i< arregloEnteros.length; i++)
+    	{ 
+    		if (arregloEnteros[i]== valor) 
+    		{
+    			contador++;
+    		}
+    	}
+    	int[]nuevoArreglo = new int[arregloEnteros.length-contador];
+    	int indiceNuevo=0;
+    	for(int i=0; i< arregloEnteros.length; i++)
+    	{
+    		if (arregloEnteros[i] != valor)
+    		{
+    			nuevoArreglo[indiceNuevo]=arregloEnteros[i];
+    			indiceNuevo++;
+    			
+    		}
+    	}
+    	arregloEnteros = nuevoArreglo;
     }
 
     /**
@@ -145,18 +148,27 @@ public class SandboxArreglos
      */
     public void eliminarCadena( String cadena )
     {
-        for (int i = 0; i < getCantidadCadenas() - 1; i++) {
-            if (arregloCadenas[i] == cadena) {
-              arregloCadenas = new String[getCantidadCadenas() - 1];
-              for (int index = 0; index < i; index++) {
-                arregloCadenas[index] = getCopiaCadenas()[index];
-              }
-              for (int j = i; j < getCantidadCadenas() - 1; j++) {
-                arregloCadenas[j] = getCopiaCadenas()[j + 1];
-              }
-              
-            }
-          } 
+    	int contador=0;
+    	for(int i=0; i< arregloCadenas.length; i++)
+    	{ 
+    		if (arregloCadenas[i]== cadena) 
+    		{
+    			contador++;
+    		}
+    	}
+    	String[]nuevoArreglo = new String[arregloCadenas.length-contador];
+    	int indiceNuevo=0;
+    	for(int i=0; i< arregloCadenas.length; i++)
+    	{
+    		if (arregloCadenas[i] != cadena)
+    		{
+    			nuevoArreglo[indiceNuevo]=arregloCadenas[i];
+    			indiceNuevo++;
+    			
+    		}
+    	}
+
+    	arregloCadenas = nuevoArreglo;
 
     }
 
@@ -169,43 +181,33 @@ public class SandboxArreglos
      */
     public void insertarEntero( int entero, int posicion )
     {
-    	if (posicion >= 0 && posicion < arregloEnteros.length) {
-    		
-            int[] result = new int[arregloEnteros.length + 1];
-            
-            for (int i = 0; i < posicion; i++) {
-                result[i] = arregloEnteros[i];
-            }
-     
-            result[posicion] = entero;
-     
-            for (int i = posicion + 1; i <= arregloEnteros.length; i++) {
-                result[i] = arregloEnteros[i - 1];
-            }
-     
-    		arregloEnteros = result;
-    		
-    	} else if (posicion > arregloEnteros.length) {
-    		agregarEntero(entero);
-    		
-    	} else if(posicion < 0) {
-    		int[] result = new int[arregloEnteros.length + 1];
-              
-              for (int i = 0; i < 0; i++) {
-                  result[i] = arregloEnteros[i];
-              }
-       
-              result[0] = entero;
-       
-              for (int i = 0 + 1; i <= arregloEnteros.length; i++) {
-                  result[i] = arregloEnteros[i - 1];
-              }
-       
-      		arregloEnteros = result;
-    		
-    	}
+    	if (posicion < 0) 
+    	{
+            posicion = 0;
+        }
+        if (posicion > arregloEnteros.length) 
+        {
+            posicion = arregloEnteros.length;
+        }
+        int[] nuevoArreglo = new int[arregloEnteros.length + 1];
+
+        
+        for (int i = 0; i < posicion; i++) 
+        {
+            nuevoArreglo[i] = arregloEnteros[i];
+        }
+        nuevoArreglo[posicion] = entero;
+
+        for (int i = posicion + 1; i < nuevoArreglo.length; i++) 
+        {
+            nuevoArreglo[i] = arregloEnteros[i - 1];
+        }
+
+        arregloEnteros = nuevoArreglo;
+    
     	
     }
+
 
     /**
      * Elimina un valor del arreglo de enteros dada su posición.
@@ -214,30 +216,19 @@ public class SandboxArreglos
      */
     public void eliminarEnteroPorPosicion( int posicion )
     {
-    	int elementoParaEliminar = 0;
-    	int busquedaPosicion = 0;
-    	
-    	for (int element : arregloEnteros) {
-    		if (busquedaPosicion == posicion) {
-    			elementoParaEliminar = element;
-    		}
-    		busquedaPosicion++;
-    	}
-    		
-    	
-        for (int i = 0; i < arregloEnteros.length - 1; i++) {
-            if (arregloEnteros[i] == elementoParaEliminar) {
-              int[] newArr = new int[arregloEnteros.length - 1];
-              for (int index = 0; index < i; index++) {
-                newArr[index] = arregloEnteros[index];
-              }
-              for (int j = i; j < arregloEnteros.length - 1; j++) {
-                newArr[j] = arregloEnteros[j + 1];
-              }
-              arregloEnteros = newArr;
-              break;
+    	if (posicion >= 0 && posicion < arregloEnteros.length)
+    	{
+          
+            int[] nuevoArreglo = new int[arregloEnteros.length - 1];
+            for (int i = 0, j = 0; i < arregloEnteros.length; i++) 
+            {
+                if (i != posicion)
+                {
+                    nuevoArreglo[j++] = arregloEnteros[i];
+                }
             }
-          }
+            arregloEnteros = nuevoArreglo;
+        }
 
     }
 
@@ -249,21 +240,11 @@ public class SandboxArreglos
      */
     public void reiniciarArregloEnteros( double[] valores )
     {
-    	int [] nuevoArreglo = new int [0];
-    	for (double element : valores) {
-    		int elementx = (int) element;
-    		
-    	  nuevoArreglo = new int[nuevoArreglo.length + 1];
-          
-          for (int i = 0; i < nuevoArreglo.length-1; i++) {
-        	  nuevoArreglo[i] = nuevoArreglo[i];
-          }
-   
-          nuevoArreglo[nuevoArreglo.length-1] = elementx;
-   
-  	
-    	}
-    	arregloEnteros = nuevoArreglo.clone();
+    	int[] nuevoArreglo = new int[valores.length];
+        for (int i = 0; i < valores.length; i++) {
+            nuevoArreglo[i] = (int) valores[i];
+        }
+        arregloEnteros = nuevoArreglo;
     }
 
     /**
@@ -274,25 +255,12 @@ public class SandboxArreglos
      */
     public void reiniciarArregloCadenas( Object[] objetos )
     {
-    	String [] nuevoArreglo = new String [0];
-    	for (Object element : objetos) {
-    		String elementx = element.toString();
-    		
-    	  nuevoArreglo = new String[nuevoArreglo.length + 1];
-          
-          for (int i = 0; i < nuevoArreglo.length-1; i++) {
-        	  nuevoArreglo[i] = nuevoArreglo[i];
-          }
-   
-          nuevoArreglo[nuevoArreglo.length-1] = elementx;
-   
-          for (int i = nuevoArreglo.length-1 + 1; i <= nuevoArreglo.length; i++) {
-        	  arregloCadenas[i] = nuevoArreglo[i - 1];
-          }
-  	
-    	}
-    	
-
+    	String[] nuevoArreglo = new String[objetos.length];
+        for (int x = 0; x < objetos.length; x++) 
+        {
+            nuevoArreglo[x] = objetos[x].toString();
+        }
+        arregloCadenas = nuevoArreglo;
     }
 
     /**
@@ -333,8 +301,27 @@ public class SandboxArreglos
      */
     public void organizarCadenas( )
     {
-    	Arrays.sort(arregloCadenas);
+    		
+    		{
+    			int n = arregloCadenas.length;
+    			
+    			for (int i = 0; i < n - 1; i++) {
+    				for (int j = 0; j < n - i - 1; j++) {
+    					if (arregloCadenas[j] != null) {
+    						if (arregloCadenas[j].compareTo(arregloCadenas[j + 1]) > 0) {
+    							
+    							String temp = arregloCadenas[j];
+    							arregloCadenas[j] = arregloCadenas[j + 1];
+    							arregloCadenas[j + 1] = temp;
+    						}
+    						
+    					}
+    				}
+    			}
+    		}
+    	
     }
+    
 
     /**
      * Cuenta cuántas veces aparece el valor recibido por parámetro en el arreglo de enteros
@@ -342,15 +329,19 @@ public class SandboxArreglos
      * @return La cantidad de veces que aparece el valor
      */
     public int contarApariciones( int valor )
-    {
-    	int contador = 0;
-    	for (int element : arregloEnteros) {
-    		if(element == valor) {
-    			contador++;
-    		}
-    	}
-        return contador;
-    }
+    {   int contador =0;
+	for (int i= 0; i < arregloEnteros.length; i++ )
+	{ 
+		if (arregloEnteros[i]== valor)
+		{
+			contador++;
+			
+		}
+		
+	}
+    return contador;
+}
+
 
     /**
      * Cuenta cuántas veces aparece la cadena recibida por parámetro en el arreglo de cadenas.
@@ -361,14 +352,21 @@ public class SandboxArreglos
      */
     public int contarApariciones( String cadena )
     {
-        	int contador = 0;
-        	for (String element : arregloCadenas) {
-        		if(element.equalsIgnoreCase(cadena)) {
-        			contador++;
-        		}
-        	}
-        return contador;
+    	
+    String cadenaLowerCase = cadena.toLowerCase();
+    int contador = 0;
+
+    for (String elemento : arregloCadenas) {
+    	if (elemento != null) {
+    		
+    		if (elemento.toLowerCase().equals(cadenaLowerCase)) {
+    			contador++;
+    		}
+    	}
     }
+
+    return contador;
+}
 
     /**
      * Busca en qué posiciones del arreglo de enteros se encuentra el valor que se recibe en el parámetro
@@ -377,29 +375,21 @@ public class SandboxArreglos
      *         es de tamaño 0.
      */
     public int[] buscarEntero( int valor )
+    {   
+    	int tamanio = contarApariciones( valor);
+    	int[] retorno = new int[tamanio];
+    	if (tamanio != 0)
     {
-    	int [] arregloPosiciones = new int [0];
-    	int posicionEncontrada = 0;
-    	
-    	for (int element : arregloEnteros) {
-    		if (element == valor) {
-    			arregloPosiciones = new int[arregloPosiciones.length + 1];
-    			
-    	          for (int i = 0; i < arregloPosiciones.length-1; i++) {
-    	        	  arregloPosiciones[i] = arregloPosiciones[i];
-    	          }
-    	   
-    	          arregloPosiciones[arregloPosiciones.length-1] = posicionEncontrada;
-    	   
-    	          for (int i = arregloPosiciones.length-1 + 1; i <= arregloPosiciones.length; i++) {
-    	        	  arregloPosiciones[i] = arregloPosiciones[i - 1];
-    	          }
-    			
+    	for (int i = 0, j=0; i < arregloEnteros.length; i++)
+    	{
+    		if (arregloEnteros[i]== valor)
+    		{
+    			retorno[j]=i;
+    			j++;
     		}
-    		
     	}
-    	
-        return arregloPosiciones;
+    }
+		return retorno ;
     }
 
     /**
@@ -408,32 +398,32 @@ public class SandboxArreglos
      *         en el arreglo de enteros. Si el arreglo está vacío, debe retornar un arreglo vacío.
      */
     public int[] calcularRangoEnteros( )
-    {
-        for(int i=0;i<(arregloEnteros.length-1);i++){
-            for(int j=i+1;j<arregloEnteros.length;j++){
-                if(arregloEnteros[i]>arregloEnteros[j]){
-                    
-                    int variableAuxiliar=arregloEnteros[i];
-                    arregloEnteros[i]=arregloEnteros[j];
-                    arregloEnteros[j]=variableAuxiliar;
-                }
-            }
-        }
-    	int tamaño = arregloEnteros.length;
-    	int mayor = arregloEnteros[tamaño-1];
-    	int menor = arregloEnteros[0];
-    	
-    	if(arregloEnteros.length > 0) {
-    		int [] rangoEnteros = new int[] {menor, mayor};
-    		return rangoEnteros;
-    		
-    	} else {
-    		
-    		int [] rangoEnteros = new int[] {};
-    		return rangoEnteros;
-    		
-    	}
-    }
+    {   int[] retorno= arregloEnteros;
+	if (arregloEnteros.length !=0)
+	{   double mayor = Double.NEGATIVE_INFINITY;
+		double menor = Double.POSITIVE_INFINITY; 
+		for (int i=0; i < arregloEnteros.length;i++)
+		{
+			if(arregloEnteros[i]> mayor )
+			{
+				mayor=arregloEnteros[i];
+			
+			}
+			if (arregloEnteros[i]< menor)
+			{
+				menor=arregloEnteros[i];
+			
+			}
+		}
+		retorno= new int[2];
+		retorno[0] = (int) menor;
+        retorno[1] = (int) mayor;
+		
+
+		
+	}
+	return retorno;
+}
 
     /**
      * Calcula un histograma de los valores del arreglo de enteros y lo devuelve como un mapa donde las llaves son los valores del arreglo y los valores son la cantidad de
@@ -442,26 +432,12 @@ public class SandboxArreglos
      */
     public HashMap<Integer, Integer> calcularHistograma( )
     {
-    	ArrayList <Integer> revisados = new ArrayList<Integer>( );
-    	HashMap<Integer, Integer> histograma = new HashMap<Integer, Integer>();
-    	
-    	for (int element : arregloEnteros) {
-    		
-    		Integer elementx = (Integer)element;
-    		
-    		int contadorVeces = 0;
-    		if (revisados.contains(elementx) == false) {
-    			for(int similares : arregloEnteros) {
-    				if(similares == element) {
-    					contadorVeces++;
-    				}
-    		}
-    			revisados.add(elementx);
-    			histograma.put(elementx, contadorVeces-1);
-    			
-    		}
-    		
-    	}
+    	HashMap<Integer, Integer> histograma = new HashMap<>();
+
+        for (int valor : arregloEnteros) {
+            histograma.put(valor, histograma.getOrDefault(valor, 0) + 1);
+        }
+
         return histograma;
     }
 
@@ -473,22 +449,22 @@ public class SandboxArreglos
     {
     	int contadorRepetidos = 0;
     	Integer enteroComparado = null;
-    	ArrayList <Integer> visitados;
-    	visitados = new ArrayList <Integer>();
+    	ArrayList <Integer> visitados = new ArrayList <Integer>();
     	
     	for (int element : arregloEnteros)
     	{
-    		int contadorApariciones = 0;
     		enteroComparado = (Integer) element;
     		
     		if(visitados.contains(enteroComparado) == false ) {
     			
+    			int contadorApariciones = 0;
     			for (Integer elementx : arregloEnteros) {
     				if(enteroComparado == elementx) {
     					contadorApariciones++;
     					visitados.add(enteroComparado);
     				}
     			}
+    			
     			
     			if(contadorApariciones > 1) {
     				contadorRepetidos++;
@@ -520,33 +496,18 @@ public class SandboxArreglos
      */
     public boolean mismosEnteros( int[] otroArreglo )
     {
-        for(int i=0;i<(arregloEnteros.length-1);i++){
-            for(int j=i+1;j<arregloEnteros.length;j++){
-                if(arregloEnteros[i]>arregloEnteros[j]){
-                    
-                    int variableAuxiliar=arregloEnteros[i];
-                    arregloEnteros[i]=arregloEnteros[j];
-                    arregloEnteros[j]=variableAuxiliar;
-                }
-            }
+    	if (arregloEnteros.length != otroArreglo.length) {
+            return false;
         }
-        
-        for(int i=0;i<(otroArreglo.length-1);i++){
-            for(int j=i+1;j<otroArreglo.length;j++){
-                if(otroArreglo[i]>otroArreglo[j]){
-                    
-                    int variableAuxiliar=otroArreglo[i];
-                    otroArreglo[i]=otroArreglo[j];
-                    otroArreglo[j]=variableAuxiliar;
-                }
-            }
-        }
-        
-        if (arregloEnteros == otroArreglo) {
-        	return true;
-        } else {
-        	return false; 	
-        }
+
+       
+        int[] copiaArregloEnteros = Arrays.copyOf(arregloEnteros, arregloEnteros.length);
+        int[] copiaOtroArreglo = Arrays.copyOf(otroArreglo, otroArreglo.length);
+
+        Arrays.sort(copiaArregloEnteros);
+        Arrays.sort(copiaOtroArreglo);
+
+        return Arrays.equals(copiaArregloEnteros, copiaOtroArreglo);
     }
 
     /**
@@ -561,20 +522,14 @@ public class SandboxArreglos
      */
     public void generarEnteros( int cantidad, int minimo, int maximo )
     {
-    	ArrayList <Integer> listaEnteros = new ArrayList<Integer>();
-    	
-    	while (listaEnteros.size() <= cantidad) {
-    		int min = minimo + 1;
-    		int numeroAñadido = (int)Math.floor(Math.random()*maximo+min);
-    		
-    		Integer numeroNuevo = (Integer) numeroAñadido;
-    		
-    		listaEnteros.add(numeroNuevo);
-    	}
-    	
-    	arregloEnteros = listaEnteros.stream()
-                .mapToInt(Integer::intValue)
-                .toArray();
+    	Random random = new Random();
+
+        arregloEnteros = new int[cantidad];
+
+        for (int i = 0; i < cantidad; i++) 
+        {
+            arregloEnteros[i] = random.nextInt(maximo - minimo + 1) + minimo;
+        }
     }
 
 }

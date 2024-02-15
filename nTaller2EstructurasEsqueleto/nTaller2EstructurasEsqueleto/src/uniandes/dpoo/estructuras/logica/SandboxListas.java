@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Esta clase tiene un conjunto de métodos para practicar operaciones sobre listas de enteros y de cadenas.
@@ -370,18 +371,14 @@ public class SandboxListas
      */
     public void generarEnteros( int cantidad, int minimo, int maximo )
     {
-    	listaEnteros.clear();
-    	while (listaEnteros.size() < cantidad) {
-    		int min = minimo + 1;
-    		int numeroAñadido = (int)Math.floor(Math.random()*maximo+(min));
-    		
-    		Integer numeroNuevo = (Integer) numeroAñadido;
-    		
-    		listaEnteros.add(numeroNuevo);
-  
-    	}
-    	
-    		
+    	Random random = new Random();
+
+        listaEnteros.clear(); // Limpiar la lista actual
+
+        for (int i = 0; i < cantidad; i++) {
+            int numeroAleatorio = random.nextInt(maximo - minimo + 1) + minimo;
+            listaEnteros.add(numeroAleatorio);
+        }
 
     }
 

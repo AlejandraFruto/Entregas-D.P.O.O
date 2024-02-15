@@ -2,10 +2,14 @@ package uniandes.dpoo.estructuras.logica;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Esta clase tiene un conjunto de métodos para practicar operaciones sobre mapas.
@@ -43,9 +47,23 @@ public class SandboxMapas
      */
     public List<String> getValoresComoLista( )
     {
-    	List<String> valoresComoLista = new ArrayList<String>(mapaCadenas.values());
-    	valoresComoLista.sort(String.CASE_INSENSITIVE_ORDER);
-        return valoresComoLista;
+    	ArrayList<String> values = new ArrayList<>(mapaCadenas.keySet());
+    	 int n = values.size();
+
+        for (int i = 0; i < n - 1; i++) {
+        	for (int j = 0; j < n - i - 1; j++) {
+        		if (values.get(j).compareTo(values.get(j + 1)) > 0) {
+        			
+        			String temp = values.get(j);
+        			values.set(j, values.get(j + 1));
+        			values.set(j + 1, temp);
+        		}
+        	}
+        }
+        			
+		
+		
+        return values; 
     }
 
     /**
@@ -54,15 +72,12 @@ public class SandboxMapas
      */
     public List<String> getLlavesComoListaInvertida( )
     {
-    	List<String> llavesComoLista = new ArrayList<String>(mapaCadenas.keySet());
-    	llavesComoLista.sort(String.CASE_INSENSITIVE_ORDER);
     	
-    	for (int i = 0, j = llavesComoLista.size() - 1; i < j; i++) {
-            llavesComoLista.add(i, llavesComoLista.remove(j));
-        }
-
-    	
-        return llavesComoLista;
+        List<String> llavesOrdenadas = new ArrayList<>(mapaCadenas.values());
+        Collections.sort(llavesOrdenadas);
+        Collections.reverse(llavesOrdenadas);
+     
+        return llavesOrdenadas;
     }
 
     /**
@@ -113,13 +128,15 @@ public class SandboxMapas
      */
     public Collection<String> getLlaves( )
     {
-    	List<String> llavesMayusculas = new ArrayList<String>();
-    	
-    	for (String element : mapaCadenas.keySet()) {
-    		String elementx = element.toUpperCase();
-    		llavesMayusculas.add(elementx);
+    	List <String> llaves = new  ArrayList <String>();
+    	if(mapaCadenas.size() != 0) {
+    		for (String element : mapaCadenas.values()) {
+    			llaves.add(element.toUpperCase());
+    		}
+	
     	}
-        return llavesMayusculas;
+    	
+        return llaves;
     }
 
     /**
@@ -129,10 +146,9 @@ public class SandboxMapas
     public int getCantidadCadenasDiferentes( )
     {
 
-    	ArrayList <String> visitados;
-    	visitados = new ArrayList <String>();
+    	ArrayList <String> visitados = new ArrayList <String>();
     	
-    	for (String cadena : getValoresComoLista()) {
+    	for (String cadena : mapaCadenas.values()) {
     		if (visitados.contains(cadena) == false) {
     			visitados.add(cadena);
     		}
@@ -168,8 +184,15 @@ public class SandboxMapas
      */
     public void eliminarCadenaConLLave( String llave )
     {
-    	mapaCadenas.remove(llave);
 
+    	String invertida = "";
+	
+		for (int indice = llave.length() - 1; indice >= 0; indice--) {
+	
+			invertida += llave.charAt(indice);   		
+		}
+		
+		mapaCadenas.keySet().remove(invertida);
     }
 
     /**
@@ -177,14 +200,8 @@ public class SandboxMapas
      * @param cadena El valor que se debe eliminar
      */
     public void eliminarCadenaConValor( String valor )
-    {
-    	String llave = "";
-
-		for (int i = valor.length() - 1; i >= 0; i--) {
-			llave = llave + valor.charAt(i);		
-			}
-		
-		mapaCadenas.remove(llave, valor);
+    { 
+    		mapaCadenas.keySet().remove(valor);   
     }
 
     /**
@@ -195,21 +212,16 @@ public class SandboxMapas
      */
     public void reiniciarMapaCadenas( List<Object> objetos )
     {
-    	for (String element : getLlavesComoListaInvertida()) {
-    		mapaCadenas.remove(element);
-    	}
-    	
-    	for (Object element: objetos) {
-    		String llave = element.toString();
-    		String valor = "";
+        
+        	mapaCadenas.clear();
 
-    		for (int i = llave.length() - 1; i >= 0; i--) {
-    			valor = valor + llave.charAt(i);		
-    			}
-    		
-    		mapaCadenas.put(llave, valor);
-    		
-    	}
+            for (Object obj : objetos)
+            {
+                String cadena = obj.toString();
+                String key = Integer.toHexString(System.identityHashCode(obj));
+                mapaCadenas.put(key, cadena);
+            }
+        
 
     }
 
@@ -218,24 +230,18 @@ public class SandboxMapas
      */
     public void volverMayusculas( )
     {
-    	List <String> copiaLlaves = new ArrayList<String>( );
-    	
-    	for (String element : getLlavesComoListaInvertida())
-    		{
-    		copiaLlaves.add(element);
-    		}
-    	
-    	mapaCadenas.clear();
-    	
-    	for (String llave : copiaLlaves) {
-    		
-    		String valor = "";
-    		for (int i = llave.length() - 1; i >= 0; i--) {
-    			valor = valor + llave.charAt(i);		
-    			}
-    		
-    		mapaCadenas.put(llave.toUpperCase(), valor);
-    	}	
+    
+    	 Map<String, String> nuevoMapa = new HashMap<>();
+
+         for (Map.Entry<String, String> entry : mapaCadenas.entrySet()) {
+             String llaveMayusculas = entry.getKey().toUpperCase();
+             String valor = entry.getValue().toUpperCase();
+             nuevoMapa.put(llaveMayusculas, valor);
+         }
+
+         mapaCadenas.clear();
+         mapaCadenas.putAll(nuevoMapa);
+       
     }
 
     /**
@@ -245,20 +251,12 @@ public class SandboxMapas
      */
     public boolean compararValores( String[] otroArreglo )
     {
-    	int contadorNoPertenecientes = 0;
-    	boolean retorno = true;
-    	
-    	for (String valorArreglo : otroArreglo) {
-    		if (mapaCadenas.containsValue(valorArreglo) == false )  {
-    			contadorNoPertenecientes++;
-    		}
-    	} 
-    	
-    	if (contadorNoPertenecientes != 0) {
-    		retorno = false;
-	
-    	}
-        return retorno;
+        for (String elemento : otroArreglo) {
+            if (!mapaCadenas.containsValue(elemento)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
